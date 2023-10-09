@@ -28,6 +28,8 @@ public class InputController : MonoBehaviour
     Quaternion firsCamPos;
 
     public CinemachineVirtualCamera tps, fps;
+
+    GameObject arrow;
     private void Start()
     {
         firsCamPos = _FPScamera.transform.rotation;
@@ -43,14 +45,16 @@ public class InputController : MonoBehaviour
             touchStartPos = Input.mousePosition;
             tps.Priority = 0;
             fps.Priority = 1;
-            
+
+            arrow = Instantiate(archerController.arrow, archerController.arrowSpawnPoint.position, Quaternion.identity, archerController.arrowSpawnPoint);
+
         }
 
         if (Input.GetMouseButton(0))
         {
             Vector3 mouse = Input.mousePosition;
             //print(mouse - touchStartPos);
-            AimDrag();
+            //AimDrag();
 
             //_TPSCamera.transform.position = Vector3.Lerp(_TPSCamera.transform.position, _FPScamera.transform.position, 0.025f);
 
@@ -78,16 +82,29 @@ public class InputController : MonoBehaviour
         {
             //AimEnd();
             Shoot();
+            arrow.GetComponent<Rigidbody>().AddRelativeForce(transform.forward * 500f);
+            arrow.transform.parent = null;
             _animator.SetTrigger("shoot");
             //ResetCamera();
 
-            tps.Priority = 1;
-            fps.Priority = 0;
-            fps.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value = 0;
-            fps.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value = 0;
+            StartCoroutine(Reset());
 
-            archerController.gameObject.transform.localRotation = archerController.oldRotation;
+            
+            
+
+            
         }
+    }
+
+    IEnumerator Reset()
+    {
+        yield return new WaitForSeconds(0.2f);
+        tps.Priority = 1;
+        fps.Priority = 0;
+        fps.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.Value = 0;
+        fps.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.Value = 0;
+
+        archerController.gameObject.transform.localRotation = archerController.oldRotation;
     }
 
     void LimitRot()
@@ -130,6 +147,7 @@ public class InputController : MonoBehaviour
 
     void AimDrag()
     {
+        
         //if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hitInfo, 100.0f))
             //Debug.DrawRay(_camera.transform.position, _camera.transform.forward * 100.0f, Color.yellow);
     }

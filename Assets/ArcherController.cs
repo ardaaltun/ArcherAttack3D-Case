@@ -7,6 +7,8 @@ public class ArcherController : MonoBehaviour
     Animator _animator;
     bool _isAiming;
     public PositionController cont;
+    public GameObject arrow;
+    public Transform arrowSpawnPoint;
 
     public Quaternion oldRotation;
     private void Start()
