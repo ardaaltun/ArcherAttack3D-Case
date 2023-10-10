@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class InputController : MonoBehaviour
 
     [SerializeField] private Animator _animator;
     [SerializeField] Camera _FPScamera, _TPSCamera;
+    public Image crosshair;
     RaycastHit hitInfo;
 
     private Vector3 dragOrigin;
@@ -52,12 +54,13 @@ public class InputController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            Shoot();
             Vector3 mouse = Input.mousePosition;
             //print(mouse - touchStartPos);
             //AimDrag();
 
             //_TPSCamera.transform.position = Vector3.Lerp(_TPSCamera.transform.position, _FPScamera.transform.position, 0.025f);
-
+            
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
 
             
@@ -73,7 +76,7 @@ public class InputController : MonoBehaviour
             LimitRot();
             //print(mousePos);
 
-            Shoot();
+            
             //print(mouse);
             //virtualCam.transform.LookAt(mousePos * 10);
         }
@@ -81,7 +84,9 @@ public class InputController : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             //AimEnd();
+            
             Shoot();
+            crosshair.color = Color.white;
             arrow.GetComponent<Rigidbody>().AddRelativeForce(transform.forward * 500f);
             arrow.transform.parent = null;
             _animator.SetTrigger("shoot");
@@ -134,9 +139,13 @@ public class InputController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fps.transform.position, fps.transform.forward, out hit))
         {
-            Debug.Log(hit.transform.name);
             Debug.DrawRay(fps.transform.position, fps.transform.forward * 100f, Color.green);
+            //Debug.Log(hit.transform.tag);
         }
+        if (hit.transform.CompareTag("Enemy"))
+            crosshair.color = Color.green;
+        else
+            crosshair.color = Color.white;
 
     }
     //void AimStart()
