@@ -16,14 +16,12 @@ public class ArcherController : MonoBehaviour
         _animator = GetComponent<Animator>();
         oldRotation = transform.rotation;
 
-        //MovePlayerToNextPosition(cont.transformTest.position);
     }
 
     private void Update()
     {
         
     }
-    //Move player to the next position, if there is any
     public void MovePlayerToNextPosition(Vector3 position)
     {
         transform.position = new Vector3(position.x, transform.position.y, position.z);

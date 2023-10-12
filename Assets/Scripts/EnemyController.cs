@@ -7,10 +7,12 @@ public class EnemyController : MonoBehaviour
 {
 
     public Transform playerT;
-
+    public bool dead = false;
     private void Awake()
     {
         playerT = GameObject.Find("FPS").transform;
     }
 
+
+    
 }

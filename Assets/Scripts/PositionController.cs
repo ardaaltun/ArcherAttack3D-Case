@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PositionController : MonoBehaviour
 {
-    //public Transform 
 
     public Transform transformTest;
 }
